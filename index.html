@@ -56,8 +56,11 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.035em; }
 .top ul a { position: relative; }
 .top ul a::after { content: ''; position: absolute; left: 0; right: 100%; bottom: -2px; height: 1px; background: currentColor; transition: right .4s var(--ease); }
 .top ul a:hover::after { right: 0; }
-.top .live { justify-self: end; display: inline-flex; align-items: center; gap: 8px; }
-.top .live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+/* status pill sits outside the blended header so the dot stays green on any background */
+.live-pill { position: fixed; top: 8px; right: var(--pad); z-index: 51; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; background: #fff; color: var(--ink); border: 0; border-radius: 999px; text-decoration: none; transition: transform .6s var(--ease); }
+.live-pill.away { transform: translateY(-160%); }
+.live-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.25); animation: online 2s ease-in-out infinite; }
+@keyframes online { 50% { box-shadow: 0 0 0 5px rgba(34,197,94,.08); } }
 
 /* ============ hero ============ */
 .hero { position: relative; min-height: 100svh; padding: 76px var(--pad) calc(var(--gfs) * .8 + 28px); overflow: hidden; }
@@ -230,6 +233,11 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.035em; }
 .features p { font-size: .92rem; color: var(--ink-2); }
 
 /* ============ automation + review tool ============ */
+.part { display: grid; grid-template-columns: 1fr 3fr; gap: 32px; margin-bottom: 32px; }
+.part-next { margin-top: clamp(96px, 10vw, 140px); padding-top: 18px; border-top: 1px solid var(--line); }
+.part h3 { font-size: clamp(1.6rem, 2.6vw, 2.6rem); line-height: 1; text-transform: uppercase; }
+.part h3 em { text-transform: none; }
+.part p:not(.label) { color: var(--ink-2); margin-top: 14px; max-width: 40em; }
 .qa { background: var(--night); color: #e9e9ee; overflow: hidden; outline: none; }
 .qa-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: 14px 20px; border-bottom: 1px solid var(--night-line); background: var(--night-2); }
 .qa-title { display: flex; align-items: center; gap: 14px; }
@@ -398,6 +406,7 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
   .top ul { display: none; }
   .top { grid-template-columns: 1fr auto auto; }
   .menu-btn { display: block; }
+  .live-pill { right: calc(var(--pad) + 64px); }
   .hero-r { order: 1; }
   .hero-card { order: 2; }
   .ba { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -409,7 +418,7 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
   .hero { padding-top: 64px; }
   .hero-grid { grid-template-columns: 1fr; min-height: 0; gap: 32px; }
   .hero-card .frame { height: auto; width: 100%; max-width: 420px; margin: 0; }
-  .chap-head, .contact-top { grid-template-columns: 1fr; gap: 16px; }
+  .chap-head, .contact-top, .part { grid-template-columns: 1fr; gap: 16px; }
   .svc { grid-template-columns: 40px 1fr; gap: 8px 16px; padding: 22px 0; }
   .svc .d { grid-column: 2; }
   .kpis { grid-template-columns: 1fr; }
@@ -462,15 +471,14 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
     <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a class="label live" href="#contact">Available now</a>
   <button class="label menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mnav">Menu</button>
 </header>
+<a class="label live-pill" href="#contact">Available now</a>
 <nav class="mnav" id="mnav" aria-label="Menu">
   <button class="label close" id="menu-close">Close</button>
   <a href="#catalog">Photos</a>
   <a href="#reels">Video</a>
   <a href="#workflows">Workflows</a>
-  <a href="#automation">Automation</a>
   <a href="#process">Process</a>
   <a href="#contact">Contact</a>
   <p class="label">palamosejr@gmail.com · Manila, UTC+8</p>
@@ -502,7 +510,7 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
 
 <!-- ============ SERVICES INDEX ============ -->
 <div class="wrap" id="services">
-  <div class="sec-top"><span class="label">What I deliver</span><span class="label muted">(04)</span></div>
+  <div class="sec-top"><span class="label">What I deliver</span><span class="label muted">(03)</span></div>
   <ul class="svc-list">
     <li><a class="svc" href="#catalog">
       <span class="label muted">01</span><span class="t">Product photos</span>
@@ -513,12 +521,8 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
       <span class="d">Reels and ad clips that feel like real customers filmed them, without booking a shoot.</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a></li>
     <li><a class="svc" href="#workflows">
-      <span class="label muted">03</span><span class="t">AI workflows</span>
-      <span class="d">Your character in any video, and other multi-step AI jobs, run start to finish for you.</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a></li>
-    <li><a class="svc" href="#automation">
-      <span class="label muted">04</span><span class="t">Automation</span>
-      <span class="d">Sorting, checking, renaming and exporting, done by tools instead of people.</span>
+      <span class="label muted">03</span><span class="t">AI workflows &amp; automation</span>
+      <span class="d">Tools that check, sort and export hundreds of files, and multi-step AI jobs like putting your character into any video.</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a></li>
   </ul>
 </div>
@@ -641,17 +645,61 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
   <p class="cta wrap">Want reels like these for your brand? <a href="mailto:palamosejr@gmail.com?subject=Video">Email me &rarr;</a></p>
 </div>
 
-<!-- ============ 03 AI WORKFLOWS ============ -->
+<!-- ============ 03 AI WORKFLOWS + AUTOMATION ============ -->
 <section class="chapter" id="workflows">
   <div class="wrap">
     <div class="chap-head rv">
-      <div><div class="chap-num">03</div><p class="label">AI workflows</p></div>
+      <div><div class="chap-num">03</div><p class="label">AI workflows &amp; automation</p></div>
       <div>
-        <h2 class="title">Your character in any video. <em>No reshoot.</em></h2>
-        <p class="lede">Send a video that already works and the character you want in it. You get the same video back with your character, same moves, same timing, same sound. I run the whole thing for you. Sample clips on request.</p>
+        <h2 class="title">Tools that do <em>the work.</em></h2>
+        <p class="lede">A lot of the speed and accuracy comes from tools I built myself. One checks hundreds of images against the originals. Another chains several AI models into one job. Here is how each one helps you.</p>
       </div>
     </div>
 
+    <div class="part rv" id="automation">
+      <p class="label muted">Tool 01 · Review</p>
+      <div>
+        <h3>Hundreds of images, <em>checked against the real thing.</em></h3>
+        <p>Checking by eye isn't reliable, so the original photo sits next to each new image and every one is approved or sent back. <span class="t-hover">Try it: hover over it, then press A to approve or F to flag.</span><span class="t-touch">Try it: tap Approve or Flag on each image.</span></p>
+      </div>
+    </div>
+    <div class="qa rv" id="qa-app" tabindex="0" aria-label="Review tool demo">
+      <div class="qa-top">
+        <div class="qa-title"><div class="dots"><i></i><i></i><i></i></div><b>Batch review · Menswear</b></div>
+        <div class="qa-progress">
+          <div class="row"><span id="qa-count">0 / 32 approved</span><span class="flagged" id="qa-flagged">0 flagged</span></div>
+          <div class="track"><div class="fill" id="qa-fill"></div><div class="fill fl" id="qa-ffill"></div></div>
+        </div>
+      </div>
+      <div class="qa-body">
+        <div class="qa-list" id="qa-list"></div>
+        <div class="qa-main">
+          <div class="qa-view ref"><img class="thumb" id="qa-ref" alt=""><span class="lab">Original</span></div>
+          <div class="qa-view shot" id="qa-shotbox"><img class="thumb" id="qa-shot" alt=""><span class="lab" id="qa-shotlab">Front</span><span class="stamp" id="qa-stamp"></span></div>
+          <div class="qa-side">
+            <span class="risk" id="qa-risk"></span>
+            <h4 id="qa-name"></h4>
+            <div class="meta" id="qa-meta"></div>
+            <div class="why" id="qa-why"></div>
+            <div class="spacer"></div>
+            <button class="qa-btn ok" id="qa-ok">Approve <kbd>A</kbd></button>
+            <button class="qa-btn fl" id="qa-fl">Flag for redo <kbd>F</kbd></button>
+            <p class="hint">Arrow keys move between shots.</p>
+          </div>
+          <p class="qa-reflabel">The original stays on the left. Compare, decide, move on.</p>
+          <div class="qa-strip" id="qa-strip"></div>
+        </div>
+      </div>
+    </div>
+    <p class="qa-foot rv">A sample of 8 products from a real catalogue job.</p>
+
+    <div class="part part-next rv" id="swap">
+      <p class="label muted">Tool 02 · Character swap</p>
+      <div>
+        <h3>Your character in any video. <em>No reshoot.</em></h3>
+        <p>Send a video that already works and the character you want in it. You get the same video back with your character, same moves, same timing, same sound. I run the whole thing for you. Sample clips on request.</p>
+      </div>
+    </div>
     <!-- BEFORE/AFTER DEMO: hidden until the clips exist. To restore, uncomment this block and
          swap the two .ba-ph divs for <video src="work/swap-before.mp4" ...> and <video src="work/swap-after.mp4" ...>
     <div class="ba rv" id="swap-demo">
@@ -660,7 +708,7 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
       <figure><div class="ba-ph"><span class="label">After clip coming soon</span></div><figcaption class="label"><span>Delivered</span><span class="muted">Your character, same motion</span></figcaption></figure>
     </div>
     -->
-    <div class="studio-shots rv" style="margin-top:0">
+    <div class="studio-shots rv">
       <figure>
         <div class="shot-card"><img class="thumb" src="work/studio-workflow.webp" alt="Workflow tool: character swap with three methods (depth mask, face mesh, depth plus face mesh) and a slot to drop a template video" width="560" height="372" loading="lazy"></div>
         <figcaption class="label shot-cap"><span>The tool I run your job on</span><span class="muted">Three ways to swap, picked per clip</span></figcaption>
@@ -698,57 +746,13 @@ footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wr
       <div class="flow-key"><span><i class="chip">Name</i> runs on my computer</span><span><i class="chip k">Name</i> runs in the cloud</span></div>
     </details>
 
-    <p class="cta rv">Have a video you want redone with your own character? <a href="mailto:palamosejr@gmail.com?subject=Video%20character%20swap">Email me &rarr;</a></p>
-  </div>
-</section>
-
-<!-- ============ 04 AUTOMATION ============ -->
-<section class="chapter" id="automation">
-  <div class="wrap">
-    <div class="chap-head rv">
-      <div><div class="chap-num">04</div><p class="label">Automation</p></div>
-      <div>
-        <h2 class="title">The busywork, <em>handled.</em></h2>
-        <p class="lede">Checking hundreds of images by eye isn't reliable, so I built a tool for it. The original photo sits next to each new image, and each one is approved or sent back. <span class="t-hover">Try it: hover over it, then press A to approve or F to flag.</span><span class="t-touch">Try it: tap Approve or Flag on each image.</span></p>
-      </div>
-    </div>
-
-    <div class="qa rv" id="qa-app" tabindex="0" aria-label="Review tool demo">
-      <div class="qa-top">
-        <div class="qa-title"><div class="dots"><i></i><i></i><i></i></div><b>Batch review · Menswear</b></div>
-        <div class="qa-progress">
-          <div class="row"><span id="qa-count">0 / 32 approved</span><span class="flagged" id="qa-flagged">0 flagged</span></div>
-          <div class="track"><div class="fill" id="qa-fill"></div><div class="fill fl" id="qa-ffill"></div></div>
-        </div>
-      </div>
-      <div class="qa-body">
-        <div class="qa-list" id="qa-list"></div>
-        <div class="qa-main">
-          <div class="qa-view ref"><img class="thumb" id="qa-ref" alt=""><span class="lab">Original</span></div>
-          <div class="qa-view shot" id="qa-shotbox"><img class="thumb" id="qa-shot" alt=""><span class="lab" id="qa-shotlab">Front</span><span class="stamp" id="qa-stamp"></span></div>
-          <div class="qa-side">
-            <span class="risk" id="qa-risk"></span>
-            <h4 id="qa-name"></h4>
-            <div class="meta" id="qa-meta"></div>
-            <div class="why" id="qa-why"></div>
-            <div class="spacer"></div>
-            <button class="qa-btn ok" id="qa-ok">Approve <kbd>A</kbd></button>
-            <button class="qa-btn fl" id="qa-fl">Flag for redo <kbd>F</kbd></button>
-            <p class="hint">Arrow keys move between shots.</p>
-          </div>
-          <p class="qa-reflabel">The original stays on the left. Compare, decide, move on.</p>
-          <div class="qa-strip" id="qa-strip"></div>
-        </div>
-      </div>
-    </div>
-    <p class="qa-foot rv">A sample of 8 products from a real catalogue job.</p>
-
-    <ul class="auto-list rv">
+    <div class="subhead rv"><h4>More tools behind the work</h4></div>
+    <ul class="auto-list rv" style="margin-top:0">
       <li class="auto"><span class="label muted">01</span><h4>Review and delivery</h4><p><b>Hundreds of images reviewed, then shipped.</b> Powers the tool above, then exports approved images named and sorted the way the store needs them.</p><span class="label">Python</span></li>
       <li class="auto"><span class="label muted">02</span><h4>Project setup</h4><p><b>Problems found before work starts.</b> A new batch of photos is sorted by product, checked for missing angles and unclear details, and instructions for each product are prepared.</p><span class="label">Claude Code</span></li>
       <li class="auto"><span class="label muted">03</span><h4>Video breakdown</h4><p><b>Learn from what's already working.</b> Paste a TikTok, Reel or YouTube link and get its shots, pacing and hook laid out.</p><span class="label">Python + Gemini</span></li>
     </ul>
-    <p class="cta rv">Have busywork your team repeats every week? <a href="mailto:palamosejr@gmail.com?subject=Automation">Email me &rarr;</a></p>
+    <p class="cta rv">Have busywork or a multi-step AI job your team repeats? <a href="mailto:palamosejr@gmail.com?subject=AI%20workflows%20and%20automation">Email me &rarr;</a></p>
   </div>
 </section>
 
@@ -835,10 +839,12 @@ heroShow(0);
 if (!reduce) setInterval(() => { hi = (hi + 1) % HERO.length; heroShow(hi); }, 3200);
 
 // ============ nav: hide while scrolling down ============
-const topNav = document.querySelector('.top');
+const topNav = document.querySelector('.top'), livePill = document.querySelector('.live-pill');
 let lastY = scrollY;
 addEventListener('scroll', () => {
-  topNav.classList.toggle('away', scrollY > lastY && scrollY > innerHeight * .6);
+  const away = scrollY > lastY && scrollY > innerHeight * .6;
+  topNav.classList.toggle('away', away);
+  livePill.classList.toggle('away', away);
   lastY = scrollY;
 }, { passive: true });
 
