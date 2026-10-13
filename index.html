@@ -857,22 +857,22 @@ mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false);
 
 // ============ data ============
 const PRODUCTS = [
-  { id: 'P10', color: 'GreyPlaid',  name: 'Plaid Wide-Leg Pants',      cw: 'Grey Plaid',  risk: 'risky', ref: 'Listing screenshot with text' },
+  { id: 'P01', color: 'DarkWash',   name: 'Wide-Leg Jeans',            cw: 'Dark Wash',   risk: 'risky', ref: 'Flat-lay, washed denim' },
+  { id: 'P18', color: 'Red',        name: 'Board Shorts',              cw: 'Red',         risk: 'easy',  ref: 'On-model, waist crop' },
+  { id: 'P12', color: 'GreySolid',  name: '2-in-1 Athletic Shorts',    cw: 'Grey',        risk: 'risky', ref: 'Product render, liner visible' },
   { id: 'P09', color: 'NavyGold',   name: 'Stripe Panel Pants',        cw: 'Navy / Gold', risk: 'risky', ref: 'Phone photo on a chair' },
   { id: 'P06', color: 'YellowGold', name: 'Bomber Jacket',             cw: 'Yellow Gold', risk: 'easy',  ref: 'Product only, no model' },
   { id: 'P04', color: 'SageGreen',  name: 'Track Jacket',              cw: 'Sage Green',  risk: 'easy',  ref: 'On-model, head cropped' },
+  { id: 'P10', color: 'GreyPlaid',  name: 'Plaid Wide-Leg Pants',      cw: 'Grey Plaid',  risk: 'risky', ref: 'Listing screenshot with text' },
   { id: 'P16', color: 'Navy',       name: 'Waffle-Knit Crewneck',      cw: 'Navy',        risk: 'easy',  ref: 'On-model, torso crop' },
-  { id: 'P12', color: 'GreySolid',  name: '2-in-1 Athletic Shorts',    cw: 'Grey',        risk: 'risky', ref: 'Product render, liner visible' },
-  { id: 'P18', color: 'Red',        name: 'Board Shorts',              cw: 'Red',         risk: 'easy',  ref: 'On-model, waist crop' },
-  { id: 'P01', color: 'DarkWash',   name: 'Wide-Leg Jeans',            cw: 'Dark Wash',   risk: 'risky', ref: 'Flat-lay, washed denim' },
 ];
 const SHOTS = ['1_front', '2_back', '3_profile', '4_closeup'];
 const SHOT_LBL = { '1_front': 'Front', '2_back': 'Back', '3_profile': 'Profile', '4_closeup': 'Close-up' };
 const img = (p, s) => `work/ash/${p.id}_${p.color}_${s}.webp`;
 
 const REELS = [
-  { f: 'reel-1', t: 'At-home basics',     s: 'Lifestyle · interior, daylight' },
   { f: 'reel-2', t: 'Black & white pair', s: 'Street · doorway, two models' },
+  { f: 'reel-1', t: 'At-home basics',     s: 'Lifestyle · interior, daylight' },
   { f: 'reel-3', t: 'Night walk',         s: 'Street · cobblestones, handheld' },
   { f: 'reel-4', t: 'Boutique try-on',    s: 'In-store · natural light' },
   { f: 'reel-5', t: 'Rooftop night',      s: 'Event · skyline backdrop' },
@@ -924,7 +924,8 @@ const pairCard = (ref, out, name, note) => `
     </div>
     <div class="info"><b>${name}</b><span>${note}</span></div>
   </article>`;
-$('mw-pairs').innerHTML = PRODUCTS.slice(0, 3).map(p =>
+// Menswear pairs stay fixed even if the review order changes
+$('mw-pairs').innerHTML = ['P10', 'P09', 'P06'].map(id => PRODUCTS.find(p => p.id === id)).map(p =>
   pairCard(img(p, 'ref'), img(p, '1_front'), p.name, p.ref)).join('');
 
 const cmp = $('compare');
